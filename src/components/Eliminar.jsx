@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-export function Eliminar({ id }) {
+export function Eliminar({ entidad, id }) {
   const [message, setMessage] = useState("");
-  const URL = `http://localhost:8080/paciente/eliminar/${id}`;
+  const URL = `http://localhost:8080/${entidad}/eliminar/${id}`;
 
   useEffect(() => {
     if (id) {
@@ -27,4 +27,5 @@ export function Eliminar({ id }) {
 
 Eliminar.propTypes = {
   id: PropTypes.number.isRequired,
+  entidad: PropTypes.string.isRequired,
 };

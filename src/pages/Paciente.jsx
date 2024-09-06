@@ -4,11 +4,14 @@ import { useState } from "react";
 import { GuardarPaciente } from "../components/GuardarPaciente";
 
 export function Paciente(){
+    const [verGuardar, setVerGuardar] = useState(false);
     const [verBuscarTodos, setVerBuscarTodos] = useState(false);
     const [verBuscarPorId, setVerBuscarPorId] = useState(false);
-    const [verGuardarPaciente, setVerGuardarPaciente] = useState(false);
     
 
+    const manejarVerGuardar = () => {
+        setVerGuardar(!verGuardar)
+    }
     const manejarVerBuscarTodos = () => {
         setVerBuscarTodos(!verBuscarTodos);
     };
@@ -17,9 +20,7 @@ export function Paciente(){
         setVerBuscarPorId(!verBuscarPorId);
     }
 
-    const manejarVerGuardarPaciente = () => {
-        setVerGuardarPaciente(!verGuardarPaciente)
-    }
+    
 
     
     return(
@@ -28,22 +29,22 @@ export function Paciente(){
         <p>¿Cómo podemos ayudarte hoy?</p>
         <ul>
             <li>
-                <button onClick={manejarVerGuardarPaciente}>
+                <button onClick={manejarVerGuardar}>
                     Registrar un paciente nuevo
                 </button>
-                {verGuardarPaciente && <GuardarPaciente endpoint={"guardar"} metodo={"POST"}/>}  
+                {verGuardar && <GuardarPaciente endpoint={"guardar"} metodo={"POST"}/>}  
             </li>
             <li>
                 <button onClick={manejarVerBuscarTodos}>
                     Ver todos los pacientes registrados
                 </button>
-                {verBuscarTodos && <BuscarTodos />}
+                {verBuscarTodos && <BuscarTodos entidad="paciente" />}
             </li>
             <li>
                 <buttton onClick={manejarVerBuscarPorId}>
                     Buscar paciente por ID
                 </buttton>
-                {verBuscarPorId && <BuscarPorId />}  
+                {verBuscarPorId && <BuscarPorId entidad="paciente" />}  
             </li>
         </ul>
 

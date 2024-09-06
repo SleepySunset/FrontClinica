@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { GuardarPaciente } from "./GuardarPaciente";
+import { GuardarOdontologo } from "./GuardarOdontologo";
 import { Eliminar } from "./Eliminar";
+import PropTypes from "prop-types";
 
 
-export function BuscarPorId(){
+export function BuscarPorId( {entidad} ){
     
-    const [paciente, setPaciente] = useState({});
+    const [elemento, setElemento] = useState({});
     const [inputValue, setInputValue] = useState(''); 
     const [id, setId] = useState("");
-    const [selectedPaciente, setSelectedPaciente] = useState(null);
+    const [entidadSeleccionada, setEntidadSeleccionada] = useState(null);
     const [action, setAction] = useState(null);
 
 
@@ -20,38 +21,30 @@ export function BuscarPorId(){
         setId(inputValue);
     };
    
-    const URL = `http://localhost:8080/paciente/buscar/${id}`;
+    const URL = `http://localhost:8080/${entidad}/buscar/${id}`;
     
     useEffect(() =>{
         fetch(`${URL}`)
             .then((res) => res.json())
             .then((data) => {
-                setPaciente(data)
+                setElemento(data)
             }
         )
     },[URL])
 
     const manejarModificar = (id) => {
-        setSelectedPaciente(id);
+        setEntidadSeleccionada(id);
         setAction("modificar");
     }
 
     const manejarEliminar = (id) => {
-        setSelectedPaciente(id);
+        setEntidadSeleccionada(id);
         setAction("eliminar");
     }
 
-    return(
-        <>
-        <input 
-            type="text" 
-            placeholder="Ingrese el ID del paciente"
-            value={inputValue}
-            onChange={manejarInput}  
-        />
-        <button onClick={manejarBusqueda}>Buscar Paciente</button>
-        
-        {id && 
+    const renderizarTablas = () => {
+        if(entidad === "paciente"){
+            return(
             <table>
                 <thead>
                     <tr>
@@ -64,24 +57,125 @@ export function BuscarPorId(){
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>{paciente.id}</td>
-                        <td>{paciente.nombre}</td>
-                        <td>{paciente.apellido}</td>
-                        <td>{paciente.dni}</td>
-                        <td><button onClick={() => manejarModificar(paciente.id)}>Modificar</button></td>
-                        <td><button onClick={() => manejarEliminar(paciente.id)}>Eliminar</button></td>
-                    </tr>
+                        <td>{elemento.id}</td>
+                        <td>{elemento.nombre}</td>
+                        <td>{elemento.apellido}</td>
+                        <td>{elemento.dni}</td>
+                        <td>
+                            <button onClick={() => manejarModificar(elemento.id)}>
+                                Modificar
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <button onClick={() => manejarEliminar(elemento.id)}>
+                                Eliminar
+                            </button>
+                        </td>
                 </tbody>
             </table>
-        }{action === "modificar" && paciente && (
-            <GuardarPaciente endpoint="modificar" metodo="PUT" id={selectedPaciente} />
+            
+            )
+        }else if(entidad === "odontologo"){
+            return(
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>NroMatricula</th>
+                        <th>Modificar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <td>{elemento.id}</td>
+                        <td>{elemento.nombre}</td>
+                        <td>{elemento.apellido}</td>
+                        <td>{elemento.dni}</td>
+                        <td>
+                            <button onClick={() => manejarModificar(elemento.id)}>
+                                Modificar
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <button onClick={() => manejarEliminar(elemento.id)}>
+                                Eliminar
+                            </button>
+                        </td>
+                </tbody>
+            </table>
+            
+            )
+        }if (entidad === "turno"){
+            return(
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre odontologo</th>
+                        <th>Nro Matricula Odontologo</th>
+                        <th>Nombre Paciente</th>
+                        <th>DNI Paciente</th>
+                        <th>Fecha</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                        <td>{elemento.id}</td>
+                        <td>{elemento.odontologo.nombre}</td>
+                        <td>{elemento.odontologo.nroMatricula}</td>
+                        <td>{elemento.paciente.nombre}</td>
+                        <td>{elemento.paciente.dni}</td>
+                        <td>{elemento.fecha}</td>
+                        <td>
+                            <button onClick={() => manejarModificar(elemento.id)}>
+                                Modificar
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <button onClick={() => manejarEliminar(elemento.id)}>
+                                Eliminar
+                            </button>
+                        </td>
+                </tbody>
+            </table>
+            )
+        }
+            return null;    
+        }
+        
+
+    return(
+        <>
+        <input 
+            type="text" 
+            placeholder={`Ingrese el ID del ${entidad}`}
+            value={inputValue}
+            onChange={manejarInput}  
+        />
+        <button onClick={manejarBusqueda}>Buscar {entidad}</button>
+        
+        {id && 
+            <div>
+                {renderizarTablas()}
+            </div>
+        }{action === "modificar" && elemento && (
+            <GuardarOdontologo endpoint="modificar" metodo="PUT" id={entidadSeleccionada} />
         )}
-        {action === "eliminar" && selectedPaciente && (
-            <Eliminar id={selectedPaciente}/>
-        )}
+        {action === "eliminar" && entidadSeleccionada && (
+            <Eliminar id={entidadSeleccionada} entidad={entidad}/>
+        )
+        }
         
         </>
     )
 }
+
+BuscarPorId.propTypes = {
+    entidad: PropTypes.string.isRequired,
+  };
 
