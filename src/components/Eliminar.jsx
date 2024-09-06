@@ -18,7 +18,7 @@ export function Eliminar({ entidad, id }) {
         })
         .then(() => {
           setMessage("Paciente eliminado con éxito");
-        })
+        });
     }
   }, [id, URL]);
 

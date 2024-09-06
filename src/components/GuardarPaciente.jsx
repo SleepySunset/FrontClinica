@@ -1,8 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-export function GuardarPaciente( {id, endpoint, metodo}) {
-
+export function GuardarPaciente({ id, endpoint, metodo }) {
   const URL = `http://localhost:8080/paciente/${endpoint}`;
 
   const [apellido, setApellido] = useState("");
@@ -16,121 +15,112 @@ export function GuardarPaciente( {id, endpoint, metodo}) {
 
   const manejarEnvio = (e) => {
     e.preventDefault();
-  
 
-  const datosFormulario = {
-    id,
-    nombre,
-    apellido,
-    dni,
-    fechaIngreso,
-    domicilio: {
+    const datosFormulario = {
+      id,
+      nombre,
+      apellido,
+      dni,
+      fechaIngreso,
+      domicilio: {
         calle,
         numero,
         localidad,
-        provincia
-    }
-  }
+        provincia,
+      },
+    };
 
-  fetch(`${URL}`, {
-    method: `${metodo}`,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(datosFormulario),
-  })
-    .then((response) => response.json())
-    .then(() => {
-      setApellido("");
-      setNombre("");
-      setDni("");
-      setFechaIngreso("");
-      setCalle("");
-      setNumero("");
-      setLocalidad("");
-      setProvincia("");
-    });
-
-  }
-
-
+    fetch(`${URL}`, {
+      method: `${metodo}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(datosFormulario),
+    })
+      .then((response) => response.json())
+      .then(() => {
+        setApellido("");
+        setNombre("");
+        setDni("");
+        setFechaIngreso("");
+        setCalle("");
+        setNumero("");
+        setLocalidad("");
+        setProvincia("");
+      });
+  };
 
   return (
     <form onSubmit={manejarEnvio}>
       {id && (
         <div>
           <label>ID</label>
-          <input
-            type="text"
-            id="id"
-            value={id}
-            readOnly
-          />
+          <input type="text" id="id" value={id} readOnly />
         </div>
       )}
 
       <div>
         <label>Nombre</label>
-        <input    
-            type="text"
-            id="nombre"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
+        <input
+          type="text"
+          id="nombre"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
         />
       </div>
 
       <div>
         <label>Apellido</label>
-        <input 
-            type="text" 
-            id="apellido"
-            value={apellido}
-            onChange={(e) => setApellido(e.target.value)}
-            required
+        <input
+          type="text"
+          id="apellido"
+          value={apellido}
+          onChange={(e) => setApellido(e.target.value)}
+          required
         />
       </div>
 
       <div>
         <label>DNI</label>
         <input
-            type="text"
-            id="dni"
-            value={dni}
-            onChange={(e) => setDni(e.target.value)}
-            required            
+          type="text"
+          id="dni"
+          value={dni}
+          onChange={(e) => setDni(e.target.value)}
+          required
         />
       </div>
 
       <div>
         <label>Fecha de Ingreso</label>
         <input
-            type="date"
-            id="fechaIngreso"
-            value={fechaIngreso}
-            onChange={(e) => setFechaIngreso(e.target.value)}
-            required
+          type="date"
+          id="fechaIngreso"
+          value={fechaIngreso}
+          onChange={(e) => setFechaIngreso(e.target.value)}
+          required
         />
       </div>
 
       <div>
         <label>Calle</label>
         <input
-            type="text"
-            id="calle"
-            value={calle}
-            onChange={(e) => setCalle(e.target.value)}
-            required
+          type="text"
+          id="calle"
+          value={calle}
+          onChange={(e) => setCalle(e.target.value)}
+          required
         />
       </div>
 
       <div>
         <label>Numero</label>
         <input
-            type="number"
-            id="numero"
-            value={numero}
-            onChange={(e) => setNumero(e.target.value)}
-            required
+          type="number"
+          id="numero"
+          value={numero}
+          onChange={(e) => setNumero(e.target.value)}
+          required
         />
       </div>
 
