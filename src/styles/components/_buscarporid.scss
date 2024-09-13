@@ -1,0 +1,58 @@
+.container-buscarporid{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .input-buscarporid{
+        width: 280px;
+        font-family: $primary-font;
+        padding: 0.8rem 1.5rem;
+        margin-bottom: 1rem;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 2px 2px 14px rgba(0, 0, 0, 0.681);
+        z-index: 10;
+    }
+    .tabla-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-top: 2rem;
+        z-index: 10;
+        font-family: $primary-font;
+        padding: 1rem;
+        text-align: center;
+        table{
+            
+            thead{
+                th{
+                    background-color: $secondary-color;
+                    padding: 12px 15px;   
+                }
+            }
+            tbody{
+                
+                tr{
+                    
+                    td{
+                        padding: 1rem;
+                        
+                    }
+                }
+            }
+            
+        }
+        
+        .btn-modificareliminar{
+            background-color: white;
+            border: none;
+            
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+    
+}
+

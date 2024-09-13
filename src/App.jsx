@@ -7,7 +7,7 @@ import { Header } from "./components/Header.jsx";
 
 function App() {
   return (
-    <>
+    <div className="container">
       <Header />
       <Routes>
         <Route path="/" element={<Inicio />} />
@@ -15,7 +15,7 @@ function App() {
         <Route path="/odontologo" element={<Odontologo />} />
         <Route path="/turno" element={<Turno />} />
       </Routes>
-    </>
+    </div>
   );
 }
 

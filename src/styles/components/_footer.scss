@@ -1,0 +1,21 @@
+footer{
+    display: flex;
+    padding: 0 6rem;
+    width: 100%;
+    background-color: $primary-color;
+    box-shadow: 2px 2px 14px rgba(0, 0, 0, 0.681);
+    p{
+        font-family: $primary-font;
+        text-align: center;
+        font-size: 1.4rem;
+        padding: 2rem;
+        line-height: 2rem;
+        color: white;
+    }
+    img{
+        width: 150px;
+        height: 150px;
+        border-radius: 30px;
+        padding: 2rem;
+    }
+}

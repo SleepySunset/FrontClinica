@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { GuardarPaciente } from "./GuardarPaciente";
+import { Guardar } from "./Guardar";
 import { Eliminar } from "./Eliminar";
+import { FiEdit2 } from "react-icons/fi";
+import { AiOutlineDelete } from "react-icons/ai";
 import PropTypes from "prop-types";
 
-export function BuscarTodos({ entidad }) {
+export function BuscarTodos({ entidad, manejarVerMenos }) {
   const URL = `http://localhost:8080/${entidad}/buscartodos`;
 
   useEffect(() => {
@@ -17,6 +19,7 @@ export function BuscarTodos({ entidad }) {
   const [listaEntidad, setListaEntidad] = useState([]);
   const [elemento, setElemento] = useState(null);
   const [action, setAction] = useState(null);
+  const [verGuardar, setVerGuardar] = useState(false);
 
   const renderizarTablas = () => {
     if (entidad === "paciente") {
@@ -41,12 +44,12 @@ export function BuscarTodos({ entidad }) {
                 <td>{paciente.dni}</td>
                 <td>
                   <button onClick={() => manejarModificar(paciente.id)}>
-                    Modificar
+                    <FiEdit2 />
                   </button>
                 </td>
                 <td>
                   <button onClick={() => manejarEliminar(paciente.id)}>
-                    Eliminar
+                    <AiOutlineDelete />
                   </button>
                 </td>
               </tr>
@@ -73,15 +76,15 @@ export function BuscarTodos({ entidad }) {
                 <td>{odontologo.id}</td>
                 <td>{odontologo.nombre}</td>
                 <td>{odontologo.apellido}</td>
-                <td>{odontologo.dni}</td>
+                <td>{odontologo.nroMatricula}</td>
                 <td>
                   <button onClick={() => manejarModificar(odontologo.id)}>
-                    Modificar
+                    <FiEdit2 />
                   </button>
                 </td>
                 <td>
                   <button onClick={() => manejarEliminar(odontologo.id)}>
-                    Eliminar
+                    <AiOutlineDelete />
                   </button>
                 </td>
               </tr>
@@ -101,25 +104,33 @@ export function BuscarTodos({ entidad }) {
               <th>Nombre Paciente</th>
               <th>DNI Paciente</th>
               <th>Fecha</th>
+              <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {listaEntidad.map((turno) => (
               <tr key={turno.id}>
                 <td>{turno.id}</td>
-                <td>{turno.odontologo.nombre}</td>
-                <td>{turno.odontologo.nroMatricula}</td>
-                <td>{turno.paciente.nombre}</td>
-                <td>{turno.paciente.dni}</td>
+                <td>
+                  {turno.odontologoResponseDto.nombre}{" "}
+                  {turno.odontologoResponseDto.apellido}
+                </td>
+                <td>{turno.odontologoResponseDto.matricula}</td>
+                <td>
+                  {turno.pacienteResponseDto.nombre}{" "}
+                  {turno.pacienteResponseDto.apellido}
+                </td>
+                <td>{turno.pacienteResponseDto.dni}</td>
                 <td>{turno.fecha}</td>
                 <td>
-                  <button onClick={() => manejarModificar(turno.id)}>
-                    Modificar
+                <button onClick={() => manejarModificar(turno.id)}>
+                    <FiEdit2/>
                   </button>
                 </td>
                 <td>
                   <button onClick={() => manejarEliminar(turno.id)}>
-                    Eliminar
+                    <AiOutlineDelete />
                   </button>
                 </td>
               </tr>
@@ -134,6 +145,7 @@ export function BuscarTodos({ entidad }) {
   const manejarModificar = (id) => {
     setElemento(id);
     setAction("modificar");
+    setVerGuardar(!verGuardar)
   };
 
   const manejarEliminar = (id) => {
@@ -141,20 +153,33 @@ export function BuscarTodos({ entidad }) {
     setAction("eliminar");
   };
 
+  const manejarVerMenosGuardar = () => {
+    setVerGuardar(!verGuardar);
+  }
+
   return (
-    <>
-      <h1>Listando todos los {entidad}s</h1>
-      <div>{renderizarTablas()}</div>
+    <div>
+      <div className="tabla-container">{renderizarTablas()}</div>
       {action === "eliminar" && elemento && (
         <Eliminar id={elemento} entidad={entidad} />
       )}
-      {action === "modificar" && elemento && (
-        <GuardarPaciente endpoint="modificar" metodo="PUT" id={elemento} />
+      {action === "modificar" && elemento && verGuardar && (
+        <Guardar
+          entidad={entidad}
+          endpoint="modificar"
+          metodo="PUT"
+          id={elemento}
+          manejarVerMenos={manejarVerMenosGuardar}
+        />
       )}
-    </>
+      <button className="btn-guardar" onClick={manejarVerMenos}>
+        Ver menos
+      </button>
+    </div>
   );
 }
 
 BuscarTodos.propTypes = {
   entidad: PropTypes.string.isRequired,
+  manejarVerMenos: PropTypes.func.isRequired
 };

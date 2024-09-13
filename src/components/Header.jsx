@@ -2,21 +2,21 @@ import { Link } from "react-router-dom";
 
 export function Header() {
   return (
-    <header>
-      <img src="" />
+    <header className="header">
+      <img src="../src/assets/logo2.png" />
       <nav>
         <ul>
           <li>
-            <Link to="/">Inicio</Link>
+            <Link to="/" className="link">Inicio</Link>
           </li>
           <li>
-            <Link to="/paciente">Paciente</Link>
+            <Link to="/paciente" className="link">Paciente</Link>
           </li>
           <li>
-            <Link to="/odontologo">Odontólogo</Link>
+            <Link to="/odontologo" className="link">Odontólogo</Link>
           </li>
           <li>
-            <Link to="/turno">Turno</Link>
+            <Link to="/turno" className="link">Turno</Link>
           </li>
         </ul>
       </nav>

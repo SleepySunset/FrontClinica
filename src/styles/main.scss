@@ -1,0 +1,21 @@
+//Abstracts
+@import './abstracts/variables';
+@import './abstracts/mixins';
+
+//Base
+@import './base/reset';
+
+//Components
+@import './components/buscarporid';
+@import './components/buscartodos';
+@import './components/crud';
+@import './components/footer';
+@import './components/guardar';
+@import './components/header';
+@import './components/inicio';
+@import './components/paciente';
+@import './components/titulo';
+
+
+//layout
+@import './layout/app';

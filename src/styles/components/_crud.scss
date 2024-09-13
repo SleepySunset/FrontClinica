@@ -1,0 +1,43 @@
+.crud-container{
+    position: relative;
+    width: 100%;
+    padding: 0 6rem;
+    margin-bottom: 2rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 14px rgba(0, 0, 0, 0.681);
+    // background-image: url("../src/assets/logo1.png") ;
+    // background-size: cover;
+    // background-position: center; 
+    // background-repeat: no-repeat;
+    
+    
+    
+
+    ul{
+
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+        align-items: center;
+        li{
+            display: flex;
+            padding: 2.5rem;
+            align-items: center;
+            .crud-btn{
+                padding: 1rem 2rem;
+                border-radius: 20px;
+                font-family: $primary-font;
+                color: white;
+                background-color: $primary-color;
+                border-radius: 10px;
+                box-shadow: 2px 2px 14px rgba(0, 0, 0, 0.681);
+                z-index: 10;
+                &:hover{
+                    cursor: pointer;
+                    opacity: 60%;
+                }
+            }    
+        }
+    }
+}
