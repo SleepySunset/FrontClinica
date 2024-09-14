@@ -96,13 +96,13 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Odontologo</th>
-              <th>Matricula</th>
+              <th>Odontólogo</th>
+              <th>Matrícula</th>
               <th>Paciente</th>
               <th>DNI</th>
               <th>Fecha</th>
-              <th></th>
-              <th></th>
+              <th>Modificar</th>
+              <th>Eliminar</th>
             </tr>
           </thead>
           <tbody>
@@ -156,7 +156,8 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
 
   return (
     <div className="buscartodos-container">
-      <h2>Tabla de todos los {entidad}s</h2>
+      <h2>Tabla de {entidad}s</h2>
+      <BotonAccion tipo="cerrar" manejarClick={manejarVerMenos}/>
       <div className="tabla-container">{renderizarTablas()}</div>
       {action === "eliminar" && elemento && (
         <Eliminar id={elemento} entidad={entidad} />
@@ -170,8 +171,9 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
           manejarVerMenos={manejarVerMenosGuardar}
         />
       )}
-      <BotonAccion tipo="cerrar" manejarClick={manejarVerMenos}/>
+      
       <div className="btn-container">
+        
         <Boton texto="Actualizar" manejarClick={manejarActualizar}/>
       </div>
       

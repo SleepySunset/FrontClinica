@@ -13,7 +13,8 @@ export function BuscarPorId({ entidad }) {
   const [entidadSeleccionada, setEntidadSeleccionada] = useState(null);
   const [action, setAction] = useState(null);
   const [verGuardar, setVerGuardar] = useState(false);
-
+  const [verTabla, setVerTabla] = useState(true);
+  const [mensaje, setMensaje] = useState(null);
 
   const manejarInput = (e) => {
     setInputValue(e.target.value);
@@ -22,11 +23,11 @@ export function BuscarPorId({ entidad }) {
   const manejarBusqueda = () => {
     setId(inputValue);
     setBuscando(true);
+    setVerTabla(true);
   };
 
-
   useEffect(() => {
-    if (buscando && id) { 
+    if (buscando && id) {
       const URL = `http://localhost:8080/${entidad}/buscar/${id}`;
 
       fetch(URL)
@@ -34,18 +35,19 @@ export function BuscarPorId({ entidad }) {
         .then((data) => {
           setElemento(data);
           setBuscando(false);
+          setMensaje(`Datos ${entidad} ${id}`)
         })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          setBuscando(false); 
-        })
+        .catch(() => {
+          setBuscando(false);
+          setMensaje(`${entidad} no encontrado`);
+        });
     }
-  }, [buscando, id, entidad]);
+  }, [buscando, id, entidad, verTabla]);
 
   const manejarModificar = (id) => {
     setEntidadSeleccionada(id);
     setAction("modificar");
-    setVerGuardar(!verGuardar)
+    setVerGuardar(!verGuardar);
   };
 
   const manejarEliminar = (id) => {
@@ -55,7 +57,12 @@ export function BuscarPorId({ entidad }) {
 
   const manejarVerMenos = () => {
     setVerGuardar(!verGuardar);
-  }
+  };
+
+  const manejarVerMenosTabla = () => {
+    setVerTabla(false);
+    setVerGuardar(false);
+  };
 
   const renderizarTablas = () => {
     if (entidad === "paciente") {
@@ -67,8 +74,8 @@ export function BuscarPorId({ entidad }) {
               <th>Nombre</th>
               <th>Apellido</th>
               <th>DNI</th>
-              <th></th>
-              <th></th>
+              <th>Modificar</th>
+              <th>Eliminar</th>
             </tr>
           </thead>
           <tbody>
@@ -78,13 +85,18 @@ export function BuscarPorId({ entidad }) {
               <td>{elemento.apellido}</td>
               <td>{elemento.dni}</td>
               <td>
-                <BotonAccion tipo="modificar" manejarClick={() =>manejarModificar(elemento.id)}/>
+                <BotonAccion
+                  tipo="modificar"
+                  manejarClick={() => manejarModificar(elemento.id)}
+                />
               </td>
               <td>
-                <BotonAccion tipo="eliminar" manejarClick={()=>manejarEliminar(elemento.id)}/>
+                <BotonAccion
+                  tipo="eliminar"
+                  manejarClick={() => manejarEliminar(elemento.id)}
+                />
               </td>
             </tr>
-            
           </tbody>
         </table>
       );
@@ -103,51 +115,67 @@ export function BuscarPorId({ entidad }) {
           </thead>
           <tbody>
             <tr>
-            <td>{elemento.id}</td>
-            <td>{elemento.nombre}</td>
-            <td>{elemento.apellido}</td>
-            <td>{elemento.nroMatricula}</td>
-            <td>
-            <td>
-                <BotonAccion tipo="modificar" manejarClick={()=>manejarModificar(elemento.id)}/>
+              <td>{elemento.id}</td>
+              <td>{elemento.nombre}</td>
+              <td>{elemento.apellido}</td>
+              <td>{elemento.nroMatricula}</td>
+              <td>
+                <BotonAccion
+                  tipo="modificar"
+                  manejarClick={() => manejarModificar(elemento.id)}
+                />
               </td>
               <td>
-                <BotonAccion tipo="eliminar" manejarClick={()=>manejarEliminar(elemento.id)}/>
+                <BotonAccion
+                  tipo="eliminar"
+                  manejarClick={() => manejarEliminar(elemento.id)}
+                />
               </td>
-            </td>
             </tr>
           </tbody>
         </table>
       );
-    }
-    else if (entidad === "turno") {
+    } else if (entidad === "turno") {
       return (
         <table>
           <thead className="tabla-encabezado">
             <tr>
               <th>ID</th>
-              <th>Nombre odontologo</th>
-              <th>Nro Matricula Odontologo</th>
-              <th>Nombre Paciente</th>
-              <th>DNI Paciente</th>
+              <th>Odontólogo</th>
+              <th>Matrícula</th>
+              <th>Paciente</th>
+              <th>DNI</th>
               <th>Fecha</th>
+              <th>Modificar</th>
+              <th>Eliminar</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{elemento.id}</td>
-              <td>{elemento.odontologoResponseDto?.nombre} {elemento.odontologoResponseDto?.apellido}</td>
+              <td>
+                {elemento.odontologoResponseDto?.nombre}{" "}
+                {elemento.odontologoResponseDto?.apellido}
+              </td>
               <td>{elemento.odontologoResponseDto?.matricula}</td>
-              <td>{elemento.pacienteResponseDto?.nombre} {elemento.pacienteResponseDto?.apellido}</td>
+              <td>
+                {elemento.pacienteResponseDto?.nombre}{" "}
+                {elemento.pacienteResponseDto?.apellido}
+              </td>
               <td>{elemento.pacienteResponseDto?.dni}</td>
               <td>{elemento.fecha}</td>
+
               <td>
-              <td>
-                <BotonAccion tipo="modificar" manejarClick={()=>manejarModificar(elemento.id)}/>
+                <BotonAccion
+                  tipo="modificar"
+                  manejarClick={() => manejarModificar(elemento.id)}
+                />
               </td>
               <td>
-                <BotonAccion tipo="eliminar" manejarClick={()=>manejarEliminar(elemento.id)}/>
-              </td>
+                <BotonAccion
+                  tipo="eliminar"
+                  manejarClick={() => manejarEliminar(elemento.id)}
+                />
               </td>
             </tr>
           </tbody>
@@ -160,26 +188,34 @@ export function BuscarPorId({ entidad }) {
   return (
     <div className="container-buscarporid">
       <div className="container-input">
-        <input className="input-buscarporid"
-        type="text"
-        placeholder="Ingrese el ID"
-        value={inputValue}
-        onChange={manejarInput}
+        <input
+          className="input-buscarporid"
+          type="text"
+          placeholder="Ingrese el ID"
+          value={inputValue}
+          onChange={manejarInput}
         />
-      <Boton texto={`Buscar ${entidad}`} manejarClick={manejarBusqueda}/>
+        <Boton texto={`Buscar ${entidad}`} manejarClick={manejarBusqueda} />
       </div>
-      {id && <div className="tabla-container">
-        {renderizarTablas()}
-        </div>}
-      {action === "modificar" && elemento && verGuardar && (
-        <Guardar
-          entidad={entidad}
-          endpoint="modificar"
-          metodo="PUT"
-          id={entidadSeleccionada}
-          manejarVerMenos={manejarVerMenos}
-        />
+      {id && verTabla &&  (
+        <div className="tabla-container">
+          <h2>
+            {mensaje}
+          </h2>
+          <BotonAccion tipo="cerrar" manejarClick={manejarVerMenosTabla} />
+          {mensaje !== `${entidad} no encontrado` && renderizarTablas()}
+          {action === "modificar" && elemento && verGuardar && mensaje !== `${entidad} no encontrado` && (
+            <Guardar
+              entidad={entidad}
+              endpoint="modificar"
+              metodo="PUT"
+              id={entidadSeleccionada}
+              manejarVerMenos={manejarVerMenos}
+            />
+          )}
+        </div>
       )}
+
       {action === "eliminar" && entidadSeleccionada && (
         <Eliminar id={entidadSeleccionada} entidad={entidad} />
       )}

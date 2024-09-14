@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 export function Eliminar({ entidad, id }) {
-  const [message, setMessage] = useState("");
+  const [mensaje, setMensaje] = useState("");
   const URL = `http://localhost:8080/${entidad}/eliminar/${id}`;
 
   useEffect(() => {
@@ -17,12 +17,18 @@ export function Eliminar({ entidad, id }) {
           throw new Error("Error en la eliminación");
         })
         .then(() => {
-          setMessage("Paciente eliminado con éxito");
+          setMensaje("Paciente eliminado con éxito");
+        })
+        .catch(() => {
+          setMensaje("Ha ocurrido un error");
+          setTimeout(() => {
+            setMensaje("");
+          }, 3000);
         });
     }
   }, [id, URL]);
 
-  return <p>{message}</p>;
+  return <p>{mensaje}</p>;
 }
 
 Eliminar.propTypes = {

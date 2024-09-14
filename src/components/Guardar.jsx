@@ -17,9 +17,11 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
   const [provincia, setProvincia] = useState("");
   const [pacienteId, setPacienteId] = useState("");
   const [odontologoId, setOdontologoId] = useState("");
+  const [mensaje, setMensaje] = useState("");
 
   const manejarEnvio = (e) => {
     e.preventDefault();
+    
 
     let datosForm;
     if (entidad === "paciente") {
@@ -72,9 +74,16 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
         setProvincia("");
         setPacienteId("");
         setOdontologoId("");
+        setMensaje("Datos guardados con éxito");
+        setTimeout(() => {
+          setMensaje("");
+        }, 3000);
       })
-      .catch((error) => {
-        console.error("Hubo un error:", error);
+      .catch(() => {
+        setMensaje("Ha ocurrido un error");
+        setTimeout(() => {
+          setMensaje("");
+        }, 3000);
       });
     ;
   };
@@ -179,6 +188,7 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
               required
             />
           </div>
+          {mensaje}
           {(metodo === "POST") && <Boton texto="Guardar paciente" type="submit"/>}
           {(metodo === "PUT") && <Boton texto="Actualizar paciente" type="submit"/>}
           
@@ -226,7 +236,7 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
               required
             />
           </div>
-
+          {mensaje}
           {(metodo === "POST") && <Boton texto="Guardar odontólogo" type="submit"/>}
           {(metodo === "PUT") && <Boton texto="Actualizar odontólogo" type="submit"/>}
         </form>
@@ -273,9 +283,10 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
               required
             />
           </div>
-
+          {mensaje}
           {(metodo === "POST") && <Boton texto="Guardar turno" type="submit"/>}
           {(metodo === "PUT") && <Boton texto="Actualizar turno" type="submit"/>}
+          
         </form>
       );
     }
