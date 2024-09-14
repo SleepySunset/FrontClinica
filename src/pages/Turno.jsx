@@ -1,5 +1,6 @@
 import { Crud } from "../components/Crud";
 import { Titulo } from "../components/Titulo";
+import { Footer } from "../components/Footer";
 
 export function Turno() {
   return (
@@ -12,6 +13,7 @@ export function Turno() {
           textoBuscarTodos={"Ver todos los turnos existentes"}
         />
       </div>
+      <Footer />
     </>
   );
 }
