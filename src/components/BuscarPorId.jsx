@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
+import { Boton } from "./Boton";
 import { Guardar } from "./Guardar";
 import { Eliminar } from "./Eliminar";
-import { FiEdit2 } from "react-icons/fi";
-import { AiOutlineDelete } from "react-icons/ai";
+import { BotonAccion } from "./BotonAccion";
 import PropTypes from "prop-types";
 
 export function BuscarPorId({ entidad }) {
@@ -78,14 +78,10 @@ export function BuscarPorId({ entidad }) {
               <td>{elemento.apellido}</td>
               <td>{elemento.dni}</td>
               <td>
-                <button className="btn-modificareliminar" onClick={() => manejarModificar(elemento.id)}>
-                  <FiEdit2 />
-                </button>
+                <BotonAccion tipo="modificar" manejarClick={() =>manejarModificar(elemento.id)}/>
               </td>
               <td>
-                <button className="btn-modificareliminar" onClick={() => manejarEliminar(elemento.id)}>
-                  <AiOutlineDelete />
-                </button>
+                <BotonAccion tipo="eliminar" manejarClick={()=>manejarEliminar(elemento.id)}/>
               </td>
             </tr>
             
@@ -112,14 +108,12 @@ export function BuscarPorId({ entidad }) {
             <td>{elemento.apellido}</td>
             <td>{elemento.nroMatricula}</td>
             <td>
-              <button className="btn-modificareliminar" onClick={() => manejarModificar(elemento.id)}>
-                <FiEdit2 />
-              </button>
-            </td>
             <td>
-              <button className="btn-modificareliminar" onClick={() => manejarEliminar(elemento.id)}>
-                <AiOutlineDelete />
-              </button>
+                <BotonAccion tipo="modificar" manejarClick={()=>manejarModificar(elemento.id)}/>
+              </td>
+              <td>
+                <BotonAccion tipo="eliminar" manejarClick={()=>manejarEliminar(elemento.id)}/>
+              </td>
             </td>
             </tr>
           </tbody>
@@ -148,14 +142,12 @@ export function BuscarPorId({ entidad }) {
               <td>{elemento.pacienteResponseDto?.dni}</td>
               <td>{elemento.fecha}</td>
               <td>
-                <button className="btn-modificareliminar" onClick={() => manejarModificar(elemento?.id)}>
-                  <FiEdit2 />
-                </button>
+              <td>
+                <BotonAccion tipo="modificar" manejarClick={()=>manejarModificar(elemento.id)}/>
               </td>
               <td>
-                <button className="btn-modificareliminar" onClick={() => manejarEliminar(elemento?.id)}>
-                  <AiOutlineDelete />
-                </button>
+                <BotonAccion tipo="eliminar" manejarClick={()=>manejarEliminar(elemento.id)}/>
+              </td>
               </td>
             </tr>
           </tbody>
@@ -167,14 +159,15 @@ export function BuscarPorId({ entidad }) {
 
   return (
     <div className="container-buscarporid">
-      <input className="input-buscarporid"
+      <div className="container-input">
+        <input className="input-buscarporid"
         type="text"
-        placeholder={`Ingrese el ID del ${entidad}`}
+        placeholder="Ingrese el ID"
         value={inputValue}
         onChange={manejarInput}
-      />
-      <button className="crud-btn" onClick={manejarBusqueda}>Buscar {entidad}</button>
-
+        />
+      <Boton texto={`Buscar ${entidad}`} manejarClick={manejarBusqueda}/>
+      </div>
       {id && <div className="tabla-container">
         {renderizarTablas()}
         </div>}

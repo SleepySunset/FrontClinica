@@ -8,7 +8,7 @@ export function Paciente(){
         <>
         <div className="container-entidad">
             <Titulo texto="Interfaz de paciente"/>
-            <Crud entidad={"paciente"} textoRegistro={"Registrar Paciente"} textoBuscarTodos={"Ver todos los pacientes existentes"}/>
+            <Crud entidad={"paciente"} textoRegistro={"Registrar paciente"} textoBuscarTodos={"Ver todos los pacientes existentes"}/>
         </div>
         <Footer/>
         </>

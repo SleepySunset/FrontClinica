@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Boton } from "./Boton";
+import { BotonAccion } from "./BotonAccion";
 import PropTypes from "prop-types";
 
 export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
@@ -59,7 +61,6 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
     })
       .then((response) => response.json())
       .then(() => {
-        console.log(datosForm);
         setApellido("");
         setNombre("");
         setDni("");
@@ -178,8 +179,9 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
               required
             />
           </div>
-
-          <button className="btn-guardar" type="submit">Guardar Paciente</button>
+          {(metodo === "POST") && <Boton texto="Guardar paciente" type="submit"/>}
+          {(metodo === "PUT") && <Boton texto="Actualizar paciente" type="submit"/>}
+          
         </form>
       );
     } else if (entidad === "odontologo") {
@@ -225,7 +227,8 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
             />
           </div>
 
-          <button className="btn-guardar" type="submit">Guardar Odontólogo</button>
+          {(metodo === "POST") && <Boton texto="Guardar odontólogo" type="submit"/>}
+          {(metodo === "PUT") && <Boton texto="Actualizar odontólogo" type="submit"/>}
         </form>
       );
     } else if (entidad === "turno") {
@@ -271,7 +274,8 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
             />
           </div>
 
-          <button className="btn-guardar" type="submit">Guardar Turno</button>
+          {(metodo === "POST") && <Boton texto="Guardar turno" type="submit"/>}
+          {(metodo === "PUT") && <Boton texto="Actualizar turno" type="submit"/>}
         </form>
       );
     }
@@ -280,7 +284,7 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
   return (
     <div className="container-guardar">
       <div className="container-form">{renderizarForm()}</div>
-      <button className="btn-guardar" onClick={manejarVerMenos}>Ver menos</button>
+      <BotonAccion tipo="cerrar" manejarClick={manejarVerMenos}/>
     </div>
     
   );

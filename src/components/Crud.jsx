@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Guardar } from "./Guardar";
 import { BuscarPorId } from "./BuscarPorId";
 import { BuscarTodos } from "./BuscarTodos";
+import { Boton } from "./Boton";
 
 export function Crud( {entidad, textoRegistro, textoBuscarTodos} ){
 
@@ -35,18 +36,13 @@ export function Crud( {entidad, textoRegistro, textoBuscarTodos} ){
 
     return(
         <div className="crud-container">
-            {/* <img className="logobg-crud" src="../src/assets/logo1.png"/> */}
             <ul>
             <li>
-                <button className="crud-btn" onClick={manejarVerForm} hidden={verGuardar}>
-                    {textoRegistro}
-                </button>
+                <Boton texto={textoRegistro} manejarClick={manejarVerForm} visibilidad={verGuardar}/>
                 {verForm && <Guardar entidad={entidad} endpoint={"guardar"} metodo={"POST"} manejarVerMenos={manejarVerMenosGuardar}/>}
             </li>
             <li>
-                <button className="crud-btn" onClick={manejarVerTodos} hidden={verBtnTodos}>
-                    {textoBuscarTodos}
-                </button>
+                <Boton texto={textoBuscarTodos} manejarClick={manejarVerTodos} visibilidad={verBtnTodos}/>
                 {verTodos && <BuscarTodos entidad={entidad} manejarVerMenos={manejarVerMenosBuscarTodos}/>}
             </li>
             <li>   

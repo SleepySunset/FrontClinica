@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
+import { Boton } from "./Boton";
 import { Guardar } from "./Guardar";
 import { Eliminar } from "./Eliminar";
-import { FiEdit2 } from "react-icons/fi";
-import { AiOutlineDelete } from "react-icons/ai";
+import { BotonAccion } from "./BotonAccion";
 import PropTypes from "prop-types";
 
 export function BuscarTodos({ entidad, manejarVerMenos }) {
+  
+  const [listaEntidad, setListaEntidad] = useState([]);
+  const [elemento, setElemento] = useState(null);
+  const [action, setAction] = useState(null);
+  const [verGuardar, setVerGuardar] = useState(false);
+  const [actualizar, setActualizar] = useState(false);
+  
   const URL = `http://localhost:8080/${entidad}/buscartodos`;
 
   useEffect(() => {
@@ -14,13 +21,11 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
       .then((data) => {
         setListaEntidad(data);
       });
-  }, [URL]);
+  }, [URL, actualizar]);
 
-  const [listaEntidad, setListaEntidad] = useState([]);
-  const [elemento, setElemento] = useState(null);
-  const [action, setAction] = useState(null);
-  const [verGuardar, setVerGuardar] = useState(false);
-
+  useEffect(() => {
+    
+  }, [])
   const renderizarTablas = () => {
     if (entidad === "paciente") {
       return (
@@ -43,14 +48,10 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
                 <td>{paciente.apellido}</td>
                 <td>{paciente.dni}</td>
                 <td>
-                  <button onClick={() => manejarModificar(paciente.id)}>
-                    <FiEdit2 />
-                  </button>
+                  <BotonAccion tipo="modificar" manejarClick={() => manejarModificar(paciente.id)}/>
                 </td>
                 <td>
-                  <button onClick={() => manejarEliminar(paciente.id)}>
-                    <AiOutlineDelete />
-                  </button>
+                  <BotonAccion tipo="eliminar" manejarClick={() => manejarEliminar(paciente.id)}/>
                 </td>
               </tr>
             ))}
@@ -78,14 +79,10 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
                 <td>{odontologo.apellido}</td>
                 <td>{odontologo.nroMatricula}</td>
                 <td>
-                  <button onClick={() => manejarModificar(odontologo.id)}>
-                    <FiEdit2 />
-                  </button>
+                  <BotonAccion tipo="modificar" manejarClick={()=>manejarModificar(odontologo.id)}/>
                 </td>
                 <td>
-                  <button onClick={() => manejarEliminar(odontologo.id)}>
-                    <AiOutlineDelete />
-                  </button>
+                  <BotonAccion tipo="eliminar" manejarClick={()=>manejarEliminar(odontologo.id)}/>
                 </td>
               </tr>
             ))}
@@ -99,10 +96,10 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Nombre odontologo</th>
-              <th>Nro Matricula Odontologo</th>
-              <th>Nombre Paciente</th>
-              <th>DNI Paciente</th>
+              <th>Odontologo</th>
+              <th>Matricula</th>
+              <th>Paciente</th>
+              <th>DNI</th>
               <th>Fecha</th>
               <th></th>
               <th></th>
@@ -124,14 +121,10 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
                 <td>{turno.pacienteResponseDto.dni}</td>
                 <td>{turno.fecha}</td>
                 <td>
-                <button onClick={() => manejarModificar(turno.id)}>
-                    <FiEdit2/>
-                  </button>
+                  <BotonAccion tipo="modificar" manejarClick={()=>manejarModificar(turno.id)}/>
                 </td>
                 <td>
-                  <button onClick={() => manejarEliminar(turno.id)}>
-                    <AiOutlineDelete />
-                  </button>
+                  <BotonAccion tipo="eliminar" manejarClick={()=>manejarEliminar(turno.id)}/>
                 </td>
               </tr>
             ))}
@@ -157,8 +150,13 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
     setVerGuardar(!verGuardar);
   }
 
+  const manejarActualizar = () => {
+    setActualizar(prev => !prev);
+  };
+
   return (
-    <div>
+    <div className="buscartodos-container">
+      <h2>Tabla de todos los {entidad}s</h2>
       <div className="tabla-container">{renderizarTablas()}</div>
       {action === "eliminar" && elemento && (
         <Eliminar id={elemento} entidad={entidad} />
@@ -172,9 +170,11 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
           manejarVerMenos={manejarVerMenosGuardar}
         />
       )}
-      <button className="btn-guardar" onClick={manejarVerMenos}>
-        Ver menos
-      </button>
+      <BotonAccion tipo="cerrar" manejarClick={manejarVerMenos}/>
+      <div className="btn-container">
+        <Boton texto="Actualizar" manejarClick={manejarActualizar}/>
+      </div>
+      
     </div>
   );
 }

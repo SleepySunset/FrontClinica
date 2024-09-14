@@ -7,15 +7,17 @@
     background-color: $secondary-color;
     border-radius: 20px;
     filter: drop-shadow(5px 5px 12px rgba(0, 0, 0, 0.321));
+    margin-bottom: 2rem;
     .container-form{
         width: 100%;
+        
         form{
             width: 100%;
             display: flex;
             flex-direction: column;
             font-family: $primary-font;
             color: $primary-color;
-            ;
+            
             align-items: center;
             .div-form{
                 display: flex;
@@ -37,25 +39,9 @@
                 
                 
             }
-    }
-    }
-    
-    .btn-guardar{
-        width: 250px;
-        padding: 1rem 2rem;
-        margin-top: 1.5rem;
-        border-radius: 20px;
-        font-family: $primary-font;
-        color: white;
-        background-color: $primary-color;
-        border-radius: 10px;
-        box-shadow: 2px 2px 14px rgba(0, 0, 0, 0.681);
-        z-index: 10;
-        &:hover{
-            cursor: pointer;
-            opacity: 60%;
         }
     }
+    
 }
 
 

@@ -8,7 +8,7 @@ export function Odontologo(){
         <>
         <div className="container-entidad">
             <Titulo texto="Interfaz de Odontólogo"/>
-            <Crud entidad={"odontologo"} textoRegistro={"Registrar Odontólogo"} textoBuscarTodos={"Ver todos los odontólogos existentes"}/>
+            <Crud entidad={"odontologo"} textoRegistro={"Registrar odontólogo"} textoBuscarTodos={"Ver todos los odontólogos existentes"}/>
         </div>
         <Footer/>
         </>

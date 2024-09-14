@@ -7,7 +7,7 @@ export function Turno(){
         <>
         <div className="container-entidad">
             <Titulo texto="Interfaz de Turno"/>
-            <Crud entidad={"turno"} textoRegistro={"Registrar Turno"} textoBuscarTodos={"Ver todos los turnos existentes"}/>
+            <Crud entidad={"turno"} textoRegistro={"Registrar turno"} textoBuscarTodos={"Ver todos los turnos existentes"}/>
         </div>
         </>
     )
