@@ -3,7 +3,14 @@ import { Boton } from "./Boton";
 import { BotonAccion } from "./BotonAccion";
 import PropTypes from "prop-types";
 
-export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
+export function Guardar({
+  entidad,
+  id,
+  endpoint,
+  metodo,
+  manejarVerMenos,
+  manejarActualizar,
+}) {
   const URL = `http://localhost:8080/${entidad}/${endpoint}`;
 
   const [apellido, setApellido] = useState("");
@@ -21,7 +28,6 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
 
   const manejarEnvio = (e) => {
     e.preventDefault();
-    
 
     let datosForm;
     if (entidad === "paciente") {
@@ -75,23 +81,22 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
         setPacienteId("");
         setOdontologoId("");
         setMensaje("Datos guardados con éxito");
+        manejarActualizar();
         setTimeout(() => {
           setMensaje("");
         }, 3000);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         setMensaje("Ha ocurrido un error");
         setTimeout(() => {
           setMensaje("");
         }, 3000);
       });
-    ;
   };
-
 
   const renderizarForm = () => {
     if (entidad === "paciente") {
-      
       return (
         <form onSubmit={manejarEnvio}>
           {id && (
@@ -189,13 +194,15 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
             />
           </div>
           {mensaje}
-          {(metodo === "POST") && <Boton texto="Guardar paciente" type="submit"/>}
-          {(metodo === "PUT") && <Boton texto="Actualizar paciente" type="submit"/>}
-          
+          <Boton
+            texto={
+              metodo === "POST" ? "Guardar paciente" : "Actualizar paciente"
+            }
+            type="submit"
+          />
         </form>
       );
     } else if (entidad === "odontologo") {
-
       return (
         <form onSubmit={manejarEnvio}>
           {id && (
@@ -237,8 +244,12 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
             />
           </div>
           {mensaje}
-          {(metodo === "POST") && <Boton texto="Guardar odontólogo" type="submit"/>}
-          {(metodo === "PUT") && <Boton texto="Actualizar odontólogo" type="submit"/>}
+          <Boton
+            texto={
+              metodo === "POST" ? "Guardar odontólogo" : "Actualizar odontólogo"
+            }
+            type="submit"
+          />
         </form>
       );
     } else if (entidad === "turno") {
@@ -284,9 +295,10 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
             />
           </div>
           {mensaje}
-          {(metodo === "POST") && <Boton texto="Guardar turno" type="submit"/>}
-          {(metodo === "PUT") && <Boton texto="Actualizar turno" type="submit"/>}
-          
+          <Boton
+            texto={metodo === "POST" ? "Guardar turno" : "Actualizar turno"}
+            type="submit"
+          />
         </form>
       );
     }
@@ -295,9 +307,8 @@ export function Guardar({ entidad, id, endpoint, metodo, manejarVerMenos }) {
   return (
     <div className="container-guardar">
       <div className="container-form">{renderizarForm()}</div>
-      <BotonAccion tipo="cerrar" manejarClick={manejarVerMenos}/>
+      <BotonAccion tipo="cerrar" manejarClick={manejarVerMenos} />
     </div>
-    
   );
 }
 
@@ -306,5 +317,6 @@ Guardar.propTypes = {
   id: PropTypes.number,
   endpoint: PropTypes.string.isRequired,
   metodo: PropTypes.oneOf(["POST", "PUT"]).isRequired,
-  manejarVerMenos: PropTypes.func.isRequired
+  manejarVerMenos: PropTypes.func.isRequired,
+  manejarActualizar: PropTypes.func,
 };

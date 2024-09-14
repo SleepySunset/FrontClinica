@@ -5,7 +5,7 @@ import { Eliminar } from "./Eliminar";
 import { BotonAccion } from "./BotonAccion";
 import PropTypes from "prop-types";
 
-export function BuscarPorId({ entidad }) {
+export function BuscarPorId({ entidad, actGlobal }) {
   const [elemento, setElemento] = useState({});
   const [inputValue, setInputValue] = useState("");
   const [buscando, setBuscando] = useState(false);
@@ -26,6 +26,11 @@ export function BuscarPorId({ entidad }) {
     setVerTabla(true);
   };
 
+  const manejarActualizar = () => {
+    manejarBusqueda();
+    actGlobal(true);
+  };
+
   useEffect(() => {
     if (buscando && id) {
       const URL = `http://localhost:8080/${entidad}/buscar/${id}`;
@@ -35,7 +40,7 @@ export function BuscarPorId({ entidad }) {
         .then((data) => {
           setElemento(data);
           setBuscando(false);
-          setMensaje(`Datos ${entidad} ${id}`)
+          setMensaje(`Datos ${entidad} ${id}`);
         })
         .catch(() => {
           setBuscando(false);
@@ -197,27 +202,33 @@ export function BuscarPorId({ entidad }) {
         />
         <Boton texto={`Buscar ${entidad}`} manejarClick={manejarBusqueda} />
       </div>
-      {id && verTabla &&  (
+      {id && verTabla && (
         <div className="tabla-container">
-          <h2>
-            {mensaje}
-          </h2>
+          <h2>{mensaje}</h2>
           <BotonAccion tipo="cerrar" manejarClick={manejarVerMenosTabla} />
           {mensaje !== `${entidad} no encontrado` && renderizarTablas()}
-          {action === "modificar" && elemento && verGuardar && mensaje !== `${entidad} no encontrado` && (
-            <Guardar
-              entidad={entidad}
-              endpoint="modificar"
-              metodo="PUT"
-              id={entidadSeleccionada}
-              manejarVerMenos={manejarVerMenos}
-            />
-          )}
+          {action === "modificar" &&
+            elemento &&
+            verGuardar &&
+            mensaje !== `${entidad} no encontrado` && (
+              <Guardar
+                entidad={entidad}
+                endpoint="modificar"
+                metodo="PUT"
+                id={entidadSeleccionada}
+                manejarVerMenos={manejarVerMenos}
+                manejarActualizar={manejarActualizar}
+              />
+            )}
         </div>
       )}
 
       {action === "eliminar" && entidadSeleccionada && (
-        <Eliminar id={entidadSeleccionada} entidad={entidad} />
+        <Eliminar
+          id={entidadSeleccionada}
+          entidad={entidad}
+          manejarActualizar={manejarActualizar}
+        />
       )}
     </div>
   );
@@ -225,4 +236,5 @@ export function BuscarPorId({ entidad }) {
 
 BuscarPorId.propTypes = {
   entidad: PropTypes.string.isRequired,
+  actGlobal: PropTypes.func,
 };

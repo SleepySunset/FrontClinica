@@ -7,16 +7,24 @@ export function Header() {
       <nav>
         <ul>
           <li>
-            <Link to="/" className="link">Inicio</Link>
+            <Link to="/" className="link">
+              Inicio
+            </Link>
           </li>
           <li>
-            <Link to="/paciente" className="link">Paciente</Link>
+            <Link to="/paciente" className="link">
+              Paciente
+            </Link>
           </li>
           <li>
-            <Link to="/odontologo" className="link">Odontólogo</Link>
+            <Link to="/odontologo" className="link">
+              Odontólogo
+            </Link>
           </li>
           <li>
-            <Link to="/turno" className="link">Turno</Link>
+            <Link to="/turno" className="link">
+              Turno
+            </Link>
           </li>
         </ul>
       </nav>

@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-export function Eliminar({ entidad, id }) {
+export function Eliminar({ entidad, id, manejarActualizar }) {
   const [mensaje, setMensaje] = useState("");
-  const URL = `http://localhost:8080/${entidad}/eliminar/${id}`;
+  const [eliminado, setEliminado] = useState(false);
 
   useEffect(() => {
-    if (id) {
+    if (!eliminado) {
+      const URL = `http://localhost:8080/${entidad}/eliminar/${id}`;
+
       fetch(URL, {
         method: "DELETE",
       })
@@ -14,10 +16,14 @@ export function Eliminar({ entidad, id }) {
           if (response.ok) {
             return response.json();
           }
-          throw new Error("Error en la eliminación");
         })
         .then(() => {
-          setMensaje("Paciente eliminado con éxito");
+          setMensaje(`${entidad} eliminado con éxito`);
+          setTimeout(() => {
+            setMensaje("");
+          }, 3000);
+          setEliminado((prev) => !prev);
+          manejarActualizar();
         })
         .catch(() => {
           setMensaje("Ha ocurrido un error");
@@ -26,12 +32,13 @@ export function Eliminar({ entidad, id }) {
           }, 3000);
         });
     }
-  }, [id, URL]);
+  }, [eliminado, entidad, id, manejarActualizar]);
 
-  return <p>{mensaje}</p>;
+  return <span>{mensaje}</span>;
 }
 
 Eliminar.propTypes = {
   id: PropTypes.number.isRequired,
   entidad: PropTypes.string.isRequired,
+  manejarActualizar: PropTypes.func,
 };

@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
-import { Boton } from "./Boton";
 import { Guardar } from "./Guardar";
 import { Eliminar } from "./Eliminar";
 import { BotonAccion } from "./BotonAccion";
 import PropTypes from "prop-types";
 
-export function BuscarTodos({ entidad, manejarVerMenos }) {
-  
+export function BuscarTodos({ entidad, manejarVerMenos, actGlobal }) {
   const [listaEntidad, setListaEntidad] = useState([]);
-  const [elemento, setElemento] = useState(null);
+  const [id, setId] = useState(null);
   const [action, setAction] = useState(null);
   const [verGuardar, setVerGuardar] = useState(false);
   const [actualizar, setActualizar] = useState(false);
-  
+
   const URL = `http://localhost:8080/${entidad}/buscartodos`;
 
   useEffect(() => {
@@ -21,11 +19,27 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
       .then((data) => {
         setListaEntidad(data);
       });
-  }, [URL, actualizar]);
+  }, [URL, actualizar, actGlobal]);
 
-  useEffect(() => {
-    
-  }, [])
+  const manejarModificar = (id) => {
+    setId(id);
+    setAction("modificar");
+    setVerGuardar(!verGuardar);
+  };
+
+  const manejarEliminar = (id) => {
+    setId(id);
+    setAction("eliminar");
+  };
+
+  const manejarVerMenosGuardar = () => {
+    setVerGuardar(!verGuardar);
+  };
+
+  const manejarActualizar = () => {
+    setActualizar((prev) => !prev);
+  };
+
   const renderizarTablas = () => {
     if (entidad === "paciente") {
       return (
@@ -48,10 +62,16 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
                 <td>{paciente.apellido}</td>
                 <td>{paciente.dni}</td>
                 <td>
-                  <BotonAccion tipo="modificar" manejarClick={() => manejarModificar(paciente.id)}/>
+                  <BotonAccion
+                    tipo="modificar"
+                    manejarClick={() => manejarModificar(paciente.id)}
+                  />
                 </td>
                 <td>
-                  <BotonAccion tipo="eliminar" manejarClick={() => manejarEliminar(paciente.id)}/>
+                  <BotonAccion
+                    tipo="eliminar"
+                    manejarClick={() => manejarEliminar(paciente.id)}
+                  />
                 </td>
               </tr>
             ))}
@@ -79,10 +99,16 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
                 <td>{odontologo.apellido}</td>
                 <td>{odontologo.nroMatricula}</td>
                 <td>
-                  <BotonAccion tipo="modificar" manejarClick={()=>manejarModificar(odontologo.id)}/>
+                  <BotonAccion
+                    tipo="modificar"
+                    manejarClick={() => manejarModificar(odontologo.id)}
+                  />
                 </td>
                 <td>
-                  <BotonAccion tipo="eliminar" manejarClick={()=>manejarEliminar(odontologo.id)}/>
+                  <BotonAccion
+                    tipo="eliminar"
+                    manejarClick={() => manejarEliminar(odontologo.id)}
+                  />
                 </td>
               </tr>
             ))}
@@ -121,10 +147,16 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
                 <td>{turno.pacienteResponseDto.dni}</td>
                 <td>{turno.fecha}</td>
                 <td>
-                  <BotonAccion tipo="modificar" manejarClick={()=>manejarModificar(turno.id)}/>
+                  <BotonAccion
+                    tipo="modificar"
+                    manejarClick={() => manejarModificar(turno.id)}
+                  />
                 </td>
                 <td>
-                  <BotonAccion tipo="eliminar" manejarClick={()=>manejarEliminar(turno.id)}/>
+                  <BotonAccion
+                    tipo="eliminar"
+                    manejarClick={() => manejarEliminar(turno.id)}
+                  />
                 </td>
               </tr>
             ))}
@@ -135,53 +167,37 @@ export function BuscarTodos({ entidad, manejarVerMenos }) {
     return null;
   };
 
-  const manejarModificar = (id) => {
-    setElemento(id);
-    setAction("modificar");
-    setVerGuardar(!verGuardar)
-  };
-
-  const manejarEliminar = (id) => {
-    setElemento(id);
-    setAction("eliminar");
-  };
-
-  const manejarVerMenosGuardar = () => {
-    setVerGuardar(!verGuardar);
-  }
-
-  const manejarActualizar = () => {
-    setActualizar(prev => !prev);
-  };
-
   return (
     <div className="buscartodos-container">
       <h2>Tabla de {entidad}s</h2>
-      <BotonAccion tipo="cerrar" manejarClick={manejarVerMenos}/>
+      <BotonAccion tipo="cerrar" manejarClick={manejarVerMenos} />
       <div className="tabla-container">{renderizarTablas()}</div>
-      {action === "eliminar" && elemento && (
-        <Eliminar id={elemento} entidad={entidad} />
+
+      {action === "eliminar" && id && (
+        <Eliminar
+          id={id}
+          entidad={entidad}
+          manejarActualizar={manejarActualizar}
+        />
       )}
-      {action === "modificar" && elemento && verGuardar && (
+      {action === "modificar" && id && verGuardar && (
         <Guardar
           entidad={entidad}
           endpoint="modificar"
           metodo="PUT"
-          id={elemento}
+          id={id}
           manejarVerMenos={manejarVerMenosGuardar}
+          manejarActualizar={manejarActualizar}
         />
       )}
-      
-      <div className="btn-container">
-        
-        <Boton texto="Actualizar" manejarClick={manejarActualizar}/>
-      </div>
-      
+
+      <div className="btn-container"></div>
     </div>
   );
 }
 
 BuscarTodos.propTypes = {
   entidad: PropTypes.string.isRequired,
-  manejarVerMenos: PropTypes.func.isRequired
+  manejarVerMenos: PropTypes.func.isRequired,
+  actGlobal: PropTypes.bool,
 };
